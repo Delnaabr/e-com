@@ -1,0 +1,21 @@
+.main-box {
+    width: 35rem;
+    margin: 0 auto;
+  }
+  .typography-text {
+    padding-top: 7%;
+    text-align: center;
+    color: #3b5d50;
+  }
+  .grid-main {
+    padding: 5% 20%;
+  }
+  .grid-textfield {
+    width: 100%;
+    margin-top: 2rem !important;
+  }
+  .grid-textfield-btn {
+    width: 100%;
+    margin-top: 2rem !important;
+  }
+  

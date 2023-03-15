@@ -1,0 +1,22 @@
+.main-box {
+  width: 35rem;
+  margin: 0 auto;
+}
+.typography-text {
+  padding-top: 7%;
+  text-align: center;
+  color: #3b5d50;
+}
+.grid-textfield {
+  width: 100%;
+  margin-top: 2rem !important;
+}
+.grid-textfield-btn {
+  background-color: #3b5d50;
+  width: 100%;
+  margin-top: 2rem !important;
+}
+.text-already-have-aacount{
+    padding: 2rem 0;
+    text-align: center;
+}

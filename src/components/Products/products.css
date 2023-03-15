@@ -1,0 +1,12 @@
+.box-outer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 55rem;
+  margin: auto;
+}
+.img-box{
+    width: 100%;
+}
+.button-style{
+    width: 100%;
+}
