@@ -5,7 +5,7 @@
 }
 table thead th {
   background-color: #3b5d50;
-  color: #fff;
+  color: #fff !important;
 }
 
 table tbody tr:nth-of-type(odd) {
@@ -23,3 +23,23 @@ table tbody tr:nth-of-type(even) {
   width: 100px;
   height: 100px;
 }
+.app-bar-tab{
+  background-color: #fff !important;
+  display: flex !important;
+  align-items: center;
+  color: #000 !important;
+}
+.textfield-box{
+  display: flex;
+  margin: 2rem;
+}
+.typography-text-admin{
+  width: 10rem;
+  text-align: left;
+}
+.button-box{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+

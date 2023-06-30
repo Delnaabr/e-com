@@ -3,6 +3,7 @@ import { TextField, Typography, Button, Grid, Box, IconButton } from "@mui/mater
 import { Link } from "react-router-dom";
 import "./register.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { RegisteredUserDetail } from "../../utils/utils";
 
 const Register = () => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ const Register = () => {
   
     try {
       const response = await fetch(
-        'https://640999c16ecd4f9e18b55aaf.mockapi.io/api/e-com/register',
+        RegisteredUserDetail,
         {
           method: "POST",
           headers: {

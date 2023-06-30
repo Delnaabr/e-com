@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { userDetail } from "../../utils/utils";
+import { RegisteredUserDetail } from "../../utils/utils";
 import {
   Table,
   TableBody,
@@ -19,19 +19,30 @@ interface Customer {
   lastname: string;
   confirmPassword: string;
   phone: string;
+  blocked?: boolean; 
 }
 
 const Customers = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
-    fetch(userDetail)
+    fetch(RegisteredUserDetail)
       .then((response) => response.json())
       .then((data: Customer[]) => setCustomers(data))
       .catch((error) => {
         console.error("Error fetching data", error);
       });
   }, []);
+
+  const handleBlock = (customerId: string) => {
+    const updatedCustomers = customers.map((customer) => {
+      if (customer.id === customerId) {
+        return { ...customer, blocked: true };
+      }
+      return customer;
+    });
+    setCustomers(updatedCustomers);
+  };
 
   return (
     <TableContainer className="table-container">
@@ -55,7 +66,17 @@ const Customers = () => {
               <TableCell align="right">{customer.lastname}</TableCell>
               <TableCell align="right">{customer.phone}</TableCell>
               <TableCell align="right">
-                <Button className="delete-btn">Delete</Button>
+                {!customer.blocked ? (
+                  <Button
+                    className="delete-btn"
+                    color="error"
+                    onClick={() => handleBlock(customer.id)}
+                  >
+                    Block
+                  </Button>
+                ) : (
+                  "Blocked"
+                )}
               </TableCell>
             </TableRow>
           ))}

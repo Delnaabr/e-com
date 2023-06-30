@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Admin } from "../Login/Login";
 import { useHistory } from "react-router-dom";
 
-function Header() {
+function Header(CartItem:any) {
   const history = useHistory();
   const isAdmin = Admin();
 
@@ -18,9 +18,9 @@ function Header() {
         arial-label="Furni navigation bar"
       >
         <div className="container">
-          <a className="navbar-brand">
+          <div className="navbar-brand">
             Furni<span>.</span>
-          </a>
+          </div>
 
           <button
             className="navbar-toggler"
@@ -96,11 +96,15 @@ function Header() {
                     <img src="assets/images/user.svg" />
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a className="nav-link" href="cart.html">
                     <img src="assets/images/cart.svg" />
                   </a>
-                </li>
+                </li> */}
+                <Link to="/cart" className="nav-link">
+                <img src="assets/images/cart.svg" />
+                <span>{CartItem.length === 0 ? "" : CartItem.length}</span>
+                  </Link>
               </ul>
             )}
           </div>

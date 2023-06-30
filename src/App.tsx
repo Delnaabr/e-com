@@ -11,6 +11,7 @@ import Contact from "./components/Contact/contact";
 import Customers from "./components/admin/customers";
 import AdminProducts from "./components/admin/adminProduct";
 import Checkout from "./components/Checkout/Checkout";
+import Cart from "./components/Cart/Cart";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
           <Route path="/products" component={products} />
-          {/* <Route path="/cart" component={Cart}  /> */}
+          <Route path="/cart" component={Cart}  />
           <Route path="/checkout" component={Checkout}  />
           <Route path="/contactUs" render={() => <Contact />} />
           {/* <Route path ='/logout' component={} /> */}

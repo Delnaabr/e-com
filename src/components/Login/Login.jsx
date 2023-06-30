@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
+import { RegisteredUserDetail } from "../../utils/utils";
 import "./login.css";
 
 const Login = () => {
@@ -44,7 +45,7 @@ const Login = () => {
       history.push("/admin");
       setUserDetails({ email: "", password: "" });
     } else {
-      fetch("https://640999c16ecd4f9e18b55aaf.mockapi.io/api/e-com/register")
+      fetch(RegisteredUserDetail)
         .then((response) => response.json())
         .then((data) => {
           const user = data.find(
