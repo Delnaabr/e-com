@@ -41,7 +41,7 @@ const AdminProducts = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setOpenForm(false)
+    setOpenForm(false);
   };
 
   const addProducts = () => {
@@ -49,19 +49,29 @@ const AdminProducts = () => {
   };
 
   const handleDeleteProduct = (productId: string) => {
-    const index = productsDetails.findIndex(
-      (product) => product.id === productId
-    );
-    if (index !== -1) {
-      const updatedProducts = [...productsDetails];
-      updatedProducts.splice(index, 1);
-      setProductsDetails(updatedProducts);
-      setOpen(false);
-    }
+    fetch(`${getProducts}/${productId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const index = productsDetails.findIndex(
+          (product) => product.id === productId
+        );
+        if (index !== -1) {
+          const updatedProducts = [...productsDetails];
+          updatedProducts.splice(index, 1);
+          setProductsDetails(updatedProducts);
+          setOpen(false);
+          alert("Product deleted successfully");
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
   };
 
   return openForm ? (
-    <AddProductForm handleClose={handleClose} open={openForm}/>
+    <AddProductForm handleClose={handleClose} open={openForm} />
   ) : (
     <>
       <></>

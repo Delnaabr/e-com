@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 import { Admin } from "../Login/Login";
 import { useHistory } from "react-router-dom";
 
-function Header(CartItem:any) {
+const Header = (CartItem: any) => {
   const history = useHistory();
   const isAdmin = Admin();
 
-  function handleLogout() {
+  const handleLogout = () => {
     localStorage.clear();
     history.push("/login");
-  }
-  
+  };
+
   return (
     <>
       <nav
@@ -36,13 +36,13 @@ function Header(CartItem:any) {
 
           <div className="collapse navbar-collapse" id="navbarsFurni">
             <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-              <li className="nav-item active">
+              <li className="nav-item ">
                 {isAdmin ? (
                   <Link to="/home" className="nav-link">
                     Dashboard
                   </Link>
                 ) : (
-                  <Link to="/home" className="nav-link">
+                  <Link to="/home" className="nav-link ">
                     Home
                   </Link>
                 )}
@@ -66,15 +66,15 @@ function Header(CartItem:any) {
                   </Link>
                 ) : (
                   <Link to="/contactUs" className="nav-link">
-                    Contact Us
+                    Deliver your Note
                   </Link>
                 )}
               </li>
               <li>
                 {isAdmin ? (
-                  <a className="nav-link" href="about.html">
-                    Feedback
-                  </a>
+                  <Link to="/admin-feedback" className="nav-link">
+                    Feed Back
+                  </Link>
                 ) : (
                   <Link to="/login" className="nav-link">
                     Login
@@ -82,7 +82,7 @@ function Header(CartItem:any) {
                 )}
               </li>
               <li>
-                <Link className="nav-link" to="/logout" onClick={handleLogout}>
+                <Link className="nav-link" to="/home" onClick={handleLogout}>
                   Log Out
                 </Link>
               </li>
@@ -92,19 +92,14 @@ function Header(CartItem:any) {
             ) : (
               <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
                 <li>
-                  <a className="nav-link" href="#">
-                    <img src="assets/images/user.svg" />
-                  </a>
+                  <div className="nav-link" >
+                    <img src="assets/images/user.svg" alt=""/>
+                  </div>
                 </li>
-                {/* <li>
-                  <a className="nav-link" href="cart.html">
-                    <img src="assets/images/cart.svg" />
-                  </a>
-                </li> */}
                 <Link to="/cart" className="nav-link">
-                <img src="assets/images/cart.svg" />
-                <span>{CartItem.length === 0 ? "" : CartItem.length}</span>
-                  </Link>
+                  <img src="assets/images/cart.svg" alt=""/>
+                  <span>{CartItem.length === 0 ? "" : CartItem.length}</span>
+                </Link>
               </ul>
             )}
           </div>
@@ -112,5 +107,5 @@ function Header(CartItem:any) {
       </nav>
     </>
   );
-}
+};
 export default Header;

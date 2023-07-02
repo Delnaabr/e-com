@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Button, Dialog, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { getProducts } from "../../utils/utils";
 
 const AddProductForm = (props: any) => {
@@ -8,6 +8,23 @@ const AddProductForm = (props: any) => {
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch the product categories from the getProducts API endpoint
+    fetch(getProducts)
+      .then((response) => response.json())
+      .then((data) => {
+        // Extract the unique categories from the product data
+        const uniqueCategories = Array.from(
+          new Set(data.map((product: any) => product.category))
+        );
+        setCategories(uniqueCategories);
+      })
+      .catch((error) => {
+        console.error("Error fetching product categories:", error);
+      });
+  }, []);
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -69,10 +86,17 @@ const AddProductForm = (props: any) => {
         </Box>
         <Box className="textfield-box">
           <Typography className="typography-text-admin">Category</Typography>
-          <TextField
+          <Select
+            className="select-menu-item"
             value={productCategory}
-            onChange={(event) => setProductCategory(event.target.value)}
-          />
+            onChange={(event:any) => setProductCategory(event.target.value)}
+          >
+            {categories.map((category: string) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
         </Box>
         <Box className="textfield-box">
           <Typography className="typography-text-admin">Quantity</Typography>

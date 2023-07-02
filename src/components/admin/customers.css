@@ -37,6 +37,9 @@ table tbody tr:nth-of-type(even) {
   width: 10rem;
   text-align: left;
 }
+.select-menu-item{
+  width: 14rem;
+}
 .button-box{
   display: flex;
   justify-content: center;

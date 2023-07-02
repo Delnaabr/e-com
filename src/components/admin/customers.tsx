@@ -19,7 +19,7 @@ interface Customer {
   lastname: string;
   confirmPassword: string;
   phone: string;
-  blocked?: boolean; 
+  blocked?: boolean;
 }
 
 const Customers = () => {
@@ -35,13 +35,22 @@ const Customers = () => {
   }, []);
 
   const handleBlock = (customerId: string) => {
-    const updatedCustomers = customers.map((customer) => {
-      if (customer.id === customerId) {
-        return { ...customer, blocked: true };
-      }
-      return customer;
-    });
-    setCustomers(updatedCustomers);
+    fetch(`${RegisteredUserDetail}/${customerId}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        const updatedCustomers = customers.map((customer) => {
+          if (customer.id === customerId) {
+            return { ...customer, blocked: true };
+          }
+          return customer;
+        });
+        setCustomers(updatedCustomers);
+        alert("Blocked the User");
+      })
+      .catch((error) => {
+        console.error("Error blocking customer:", error);
+      });
   };
 
   return (

@@ -12,6 +12,7 @@ import Customers from "./components/admin/customers";
 import AdminProducts from "./components/admin/adminProduct";
 import Checkout from "./components/Checkout/Checkout";
 import Cart from "./components/Cart/Cart";
+import FeedBackView from "./components/admin/feedBackView";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
           <Route path="/cart" component={Cart}  />
           <Route path="/checkout" component={Checkout}  />
           <Route path="/contactUs" render={() => <Contact />} />
+          <Route path="/admin-feedback" render={() => <FeedBackView/>} />
+
           {/* <Route path ='/logout' component={} /> */}
         </Switch>
         <Footer />

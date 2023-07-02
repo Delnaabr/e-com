@@ -21,7 +21,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event:any) => {
     const { name, value } = event.target;
     setUserDetails({ ...userDetails, [name]: value });
   };
@@ -30,7 +30,7 @@ const Login = () => {
     history.push("/register");
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = (event:any) => {
     event.preventDefault();
   
     const adminEmail = "admin@gmail.com";
@@ -49,7 +49,7 @@ const Login = () => {
         .then((response) => response.json())
         .then((data) => {
           const user = data.find(
-            (item) =>
+            (item:any) =>
               item.email === userDetails.email &&
               item.password === userDetails.password
           );

@@ -14,21 +14,17 @@ interface Product {
 export default function Products() {
   const [data, setData] = useState<Product[]>([]);
   const [filter, setFilter] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
       try {
         const response = await fetch(getProducts);
         const products = await response.json();
         setData(products);
         setFilter(products);
-        setLoading(false);
       } catch (error) {
         console.error(error);
-        setLoading(false);
       }
     };
 
@@ -38,11 +34,6 @@ export default function Products() {
   const filterProduct = (cata: string) => {
     const updatedList = data.filter((x) => x.category === cata);
     setFilter(updatedList);
-  };
-
-console.log("count",cartCount)
-  const Loading = () => {
-    return <>Loading...</>;
   };
 
   const ShowProducts = () => {
@@ -69,7 +60,7 @@ console.log("count",cartCount)
           </button>
           <button
             className="btn btn-outline-dark me-2"
-            onClick={() => filterProduct("Sofa")}
+            onClick={() => filterProduct("Sofas")}
           >
             Sofas
           </button>
@@ -101,7 +92,8 @@ console.log("count",cartCount)
                   </NavLink>
                   <Button
                     className="btn btn-outline-light mt-2"
-                    onClick={() => setCartCount(cartCount + 1)} >
+                    onClick={() => setCartCount(cartCount + 1)}
+                  >
                     Add to Cart
                   </Button>
                 </Box>
@@ -128,7 +120,7 @@ console.log("count",cartCount)
           </Box>
         </Box>
         <Box className="row justify-content-center">
-          {loading ? <Loading /> : <ShowProducts />}
+          <ShowProducts />
         </Box>
       </Box>
     </Box>
