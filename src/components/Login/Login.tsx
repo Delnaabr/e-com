@@ -17,11 +17,12 @@ const Login = () => {
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
+    Id: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
 
-  const handleInputChange = (event:any) => {
+  const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setUserDetails({ ...userDetails, [name]: value });
   };
@@ -30,9 +31,8 @@ const Login = () => {
     history.push("/register");
   };
 
-  const handleFormSubmit = (event:any) => {
+  const handleFormSubmit = (event: any) => {
     event.preventDefault();
-  
     const adminEmail = "admin@gmail.com";
     const adminPassword = "admin";
   
@@ -42,22 +42,27 @@ const Login = () => {
     ) {
       alert("Admin login successful");
       localStorage.setItem("userRole", "ADMIN");
-      history.push("/admin");
-      setUserDetails({ email: "", password: "" });
+      history.push("/home");
+      window.location.reload();
+      setUserDetails({ email: "", password: "", Id: "" });
     } else {
       fetch(RegisteredUserDetail)
         .then((response) => response.json())
         .then((data) => {
           const user = data.find(
-            (item:any) =>
+            (item: any) =>
               item.email === userDetails.email &&
               item.password === userDetails.password
           );
+  
           if (user) {
             alert("Login successful");
             localStorage.setItem("userRole", "USER");
+            localStorage.setItem("userEmail", userDetails.email);
+            localStorage.setItem("userId", user.id); 
             history.push("/products");
-            setUserDetails({ email: "", password: "" });
+            setUserDetails({ email: "", password: "", Id: "" });
+            window.location.reload();
           } else {
             setLoginStatus("error");
           }
@@ -113,7 +118,9 @@ const Login = () => {
             variant="contained"
             className="grid-textfield-btn"
             sx={{ background: "#3b5d50" }}
-            onClick={(e)=>{handleFormSubmit(e)}}
+            onClick={(e) => {
+              handleFormSubmit(e);
+            }}
           >
             Login
           </Button>

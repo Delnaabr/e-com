@@ -7,14 +7,12 @@ import {
   TableHead,
   TableRow,
   Button,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogTitle,
+  Box
 } from "@mui/material";
 import "./customers.css";
 import { getProducts } from "../../utils/utils";
 import AddProductForm from "./addProduct";
+import ConfirmationDialog from "../DialogConfirmation";
 
 interface adminProduct {
   id: string;
@@ -22,6 +20,7 @@ interface adminProduct {
   product_name: string;
   product_price: string;
   product_stock: string;
+  category: string;
 }
 
 const AdminProducts = () => {
@@ -83,7 +82,7 @@ const AdminProducts = () => {
               <TableCell align="center">Product Name</TableCell>
               <TableCell align="center">Product Price</TableCell>
               <TableCell align="center">Stock</TableCell>
-              <TableCell align="center">Update Product</TableCell>
+              <TableCell align="center">Catagory</TableCell>
               <TableCell align="center">Remove Product</TableCell>
             </TableRow>
           </TableHead>
@@ -110,9 +109,7 @@ const AdminProducts = () => {
                 <TableCell align="center">{products.product_name}</TableCell>
                 <TableCell align="center">{products.product_price}</TableCell>
                 <TableCell align="center">{products.product_stock}</TableCell>
-                <TableCell align="center">
-                  <Button className="delete-btn">Edit</Button>
-                </TableCell>
+                <TableCell align="center">{products.category}</TableCell>
                 <TableCell align="center">
                   <Button
                     className="delete-btn"
@@ -123,20 +120,12 @@ const AdminProducts = () => {
                   >
                     Delete
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>
-                      {"Are you sure you want to delete the product?"}
-                    </DialogTitle>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button
-                        onClick={() => handleDeleteProduct(selectedProductId)}
-                        autoFocus
-                      >
-                        Yes
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
+                  <ConfirmationDialog
+                    open={open}
+                    confirmationMessage="Are you sure you want to delete this product ?"
+                    onClose={handleClose}
+                    onConfirm={() => handleDeleteProduct(selectedProductId)}
+                  />
                 </TableCell>
               </TableRow>
             ))}

@@ -45,4 +45,10 @@ table tbody tr:nth-of-type(even) {
   justify-content: center;
   margin-bottom: 2rem;
 }
+.status-cell{
+  color: green !important;
+}
+/* .css-hz1bth-MuiDialog-container {
+  background-color: whitesmoke;
+} */
 

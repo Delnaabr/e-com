@@ -1,0 +1,11 @@
+.cart-box{
+  padding: 2rem
+}
+.img-box{
+  width: 15rem;
+}
+.total-price{
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}

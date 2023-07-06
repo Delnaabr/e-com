@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { TextField, Typography, Button, Grid, Box, IconButton } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  Button,
+  Grid,
+  Box,
+  IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import "./register.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -21,40 +28,39 @@ const Register = () => {
     setUserDetails({ ...userDetails, [name]: value });
   };
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: any) => {
     event.preventDefault();
-  
-    try {
-      const response = await fetch(
-        RegisteredUserDetail,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userDetails),
-        }
-      );
-  
-      const data = await response.json();
-      setUserDetails({
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        password: "",
+
+    fetch(RegisteredUserDetail, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userDetails),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Registered Successfully");
+      })
+      .catch((error) => {
+        alert("Error adding product");
       });
-  
-      setOpen(true);
-    } catch (error) {
-      console.log(error);
-    }
+
+    setUserDetails({
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      password: "",
+    });
+
+    setOpen(true);
   };
-  
-  const handlePasswordVisibility= () => {
+
+  const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
- 
+
   return (
     <>
       <Box className="main-box">
@@ -121,7 +127,7 @@ const Register = () => {
               ),
             }}
           />
-         
+
           <Button
             type="submit"
             variant="contained"

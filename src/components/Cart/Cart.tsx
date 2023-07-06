@@ -1,72 +1,142 @@
-import React from "react"
-import "./style.css"
+import "./cart.css";
+import { cartItem } from "../../utils/utils";
+import { Box, Button, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
-const Cart = ({ CartItem, addToCart, decreaseQty }:any) => {
-  // Stpe: 7   calucate total of items
-  const totalPrice = CartItem?.reduce((price:any, item:any) => price + item.qty * item.price, 0)
+const Cart = (props: any) => {
+  const [cartData, setCartData] = useState<any[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const history = useHistory();
+  const userId = localStorage.getItem("userId");
 
-  // prodcut qty total
+  useEffect(() => {
+    fetch(cartItem)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Cart data:", data);
+        setCartData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    let totalPrice = 0;
+    cartData.forEach((item) => {
+      const quantity = getProductQuantity(item.product_name);
+      const price = parseFloat(item.product_price);
+      totalPrice += quantity > 1 ? price * quantity : price;
+    });
+    setTotalPrice(totalPrice);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartData]);
+
+  const getProductQuantity = (product: string) => {
+    const items = cartData.filter(
+      (item) => item.product_name === product && item.userId === userId
+    );
+    return items.length;
+  };
+
+  const getProductPrice = (product: string) => {
+    const item = cartData.find(
+      (item) => item.product_name === product && item.userId === userId
+    );
+    return item ? item.product_price : "";
+  };
+
+  const productDetails = cartData.reduce((result, item) => {
+    if (item.userId === userId && !result.includes(item.product_name)) {
+      result.push(item.product_name);
+    }
+    return result;
+  }, []);
+  
+
+  const handleBuyNow = (products: any[]) => {
+    history.push({
+      pathname: "/checkout",
+      state: { products },
+    });
+  };
+  
+  const handleShopping = () => {
+    history.push("/products");
+  };
+
   return (
     <>
-      <section className='cart-items'>
-        <div className='container d_flex'>
-          {/* if hamro cart ma kunai pani item xaina bhane no diplay */}
+      <Box className="cart-box">
+        {productDetails?.map((product:any) => {
+          const quantity = getProductQuantity(product);
+          const price = parseFloat(getProductPrice(product));
 
-          <div className='cart-details'>
-            {CartItem?.length === 0 && <h1 className='no-items product'>No Items are add in Cart</h1>}
-
-            {/* yasma hami le cart item lai display garaaxa */}
-            {CartItem?.map((item:any) => {
-              const productQty = item.price * item.qty
-
-              return (
-                <div className='cart-list product d_flex' key={item.id}>
-                  <div className='img'>
-                    <img src={item.cover} alt='' />
-                  </div>
-                  <div className='cart-details'>
-                    <h3>{item.name}</h3>
-                    <h4>
-                      ${item.price}.00 * {item.qty}
-                      <span>${productQty}.00</span>
-                    </h4>
-                  </div>
-                  <div className='cart-items-function'>
-                    <div className='removeCart'>
-                      <button className='removeCart'>
-                        <i className='fa-solid fa-xmark'></i>
-                      </button>
-                    </div>
-                    {/* stpe: 5 
-                    product ko qty lai inc ra des garne
-                    */}
-                    <div className='cartControl d_flex'>
-                      <button className='incCart' onClick={() => addToCart(item)}>
-                        <i className='fa-solid fa-plus'></i>
-                      </button>
-                      <button className='desCart' onClick={() => decreaseQty(item)}>
-                        <i className='fa-solid fa-minus'></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className='cart-item-price'></div>
-                </div>
-              )
-            })}
-          </div>
-
-          <div className='cart-total product'>
-            <h2>Cart Summary</h2>
-            <div className=' d_flex'>
-              <h4>Total Price :</h4>
-              {/* <h3>${totalPrice}.00</h3> */}
+          return (
+            <div key={product} className="product-box">
+              <div className="img-box">
+                <img
+                  src={
+                    cartData.find(
+                      (item) =>
+                        item.product_name === product && item.userId === userId
+                    )?.product_img
+                  }
+                  className="card-img-top"
+                  style={{ height: "100px", width: "auto" }}
+                  alt={product}
+                />
+              </div>
+              <div className="product-name-price">
+                <Typography className="typography-class">{product}</Typography>
+                {quantity > 1 ? (
+                  <Typography className="typography-class">
+                    Price: Rs {price * quantity}
+                  </Typography>
+                ) : (
+                  <Typography className="typography-class">
+                    Price: Rs {price}
+                  </Typography>
+                )}
+                <Typography className="typography-class">
+                  Quantity: {quantity}
+                </Typography>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
+          );
+        })}
+        {productDetails.length > 0 ? (
+          <>
+            <div className="total-price">
+              <Typography className="typography-class">
+                Total Price: Rs {totalPrice}
+              </Typography>
+            </div>
+            <div className="total-price">
+              <button
+                className="btn btn-outline-dark"
+                onClick={() => handleBuyNow(productDetails)}
+              >
+                Buy Now
+              </button>
+            </div>
+          </>
+        ) : (
+          <Typography align="center">Your Cart is empty</Typography>
+        )}
+      </Box>
+      <Box className="button-box">
+        <Button
+          variant="contained"
+          onClick={handleShopping}
+          className="button-shop"
+        >
+          Continue shopping
+        </Button>
+      </Box>
     </>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

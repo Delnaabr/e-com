@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { getProducts } from "../../utils/utils";
+import { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { cartItem, getProducts } from "../../utils/utils";
 import { Box, Button } from "@mui/material";
+import { userContext } from "../context/useContext";
 
 interface Product {
   id: string;
@@ -14,7 +15,8 @@ interface Product {
 export default function Products() {
   const [data, setData] = useState<Product[]>([]);
   const [filter, setFilter] = useState<Product[]>([]);
-  const [cartCount, setCartCount] = useState(0);
+  const history = useHistory();
+  const userId = useContext(userContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,6 +36,64 @@ export default function Products() {
   const filterProduct = (cata: string) => {
     const updatedList = data.filter((x) => x.category === cata);
     setFilter(updatedList);
+  };
+
+  const handleCart = (product: any) => {
+    if (userId) {
+      const newProduct = {
+        product_img: product.product_img,
+        product_name: product.product_name,
+        product_price: product.product_price,
+        userId: userId,
+      };
+      fetch(cartItem, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      })
+        .then((response) => response.json())
+        .then((data) => {})
+        .catch((error) => {
+          alert("Error adding product");
+        });
+    } else {
+      history.push("/login");
+    }
+  };
+
+  const handleBuyNow = (product: any) => {
+    const newProduct = {
+      product_img: product.product_img,
+      product_name: product.product_name,
+      product_price: product.product_price,
+      category: product.category,
+      product_stock: parseInt(product.product_stock),
+    };
+
+    fetch(cartItem, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // alert("Product added Successfully");
+      })
+      .catch((error) => {
+        alert("Error adding product");
+      });
+    if (userId) {
+      history.push({
+        pathname: "/checkout",
+        state: newProduct,
+      });
+    } else {
+      history.push("/login");
+    }
   };
 
   const ShowProducts = () => {
@@ -71,6 +131,7 @@ export default function Products() {
             Tables
           </button>
         </Box>
+
         {filter.map((product) => {
           return (
             <Box className="col-md-3 mb-4" key={product.id}>
@@ -87,12 +148,15 @@ export default function Products() {
                     Rs {product.product_price}
                   </p>
                   <p className="card-text lead">Free Delivery</p>
-                  <NavLink to={"/checkout"} className="btn btn-outline-dark">
+                  <button
+                    className="btn btn-outline-dark"
+                    onClick={() => handleBuyNow(product)}
+                  >
                     Buy Now
-                  </NavLink>
+                  </button>
                   <Button
-                    className="btn btn-outline-light mt-2"
-                    onClick={() => setCartCount(cartCount + 1)}
+                    className="btn btn-outline-dark mt-2"
+                    onClick={() => handleCart(product)}
                   >
                     Add to Cart
                   </Button>

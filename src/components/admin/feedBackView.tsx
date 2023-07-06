@@ -29,16 +29,16 @@ const FeedBackView = () => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Message</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Message</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {feedbackData.map((feedback, index) => (
               <TableRow key={index}>
                 <TableCell>{feedback.name}</TableCell>
-                <TableCell>{feedback.email}</TableCell>
-                <TableCell>{feedback.query}</TableCell>
+                <TableCell align="center">{feedback.email}</TableCell>
+                <TableCell align="center">{feedback.query}</TableCell>
               </TableRow>
             ))}
           </TableBody>

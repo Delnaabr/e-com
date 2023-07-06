@@ -10,7 +10,7 @@ export default function Contact() {
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
 
-  const handleSubmit = (event:any) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
 
     const feedbackData = {
@@ -48,7 +48,7 @@ export default function Contact() {
                 <span className="me-1">
                   <img
                     src="assets/images/envelope-outline.svg"
-                    alt="Image"
+                    alt=""
                     className="img-fluid"
                   />
                 </span>
@@ -63,6 +63,7 @@ export default function Contact() {
                     placeholder="Enter your name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
+                    required
                   />
                 </Box>
                 <Box>
@@ -71,6 +72,7 @@ export default function Contact() {
                     className="form-control"
                     placeholder="Enter your email"
                     value={email}
+                    required
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </Box>
@@ -81,10 +83,16 @@ export default function Contact() {
                     placeholder="Enter your Query"
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
+                    required
                   />
                 </Box>
                 <Box className="col-auto">
-                  <Button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+                  <Button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={handleSubmit}
+                    disabled={!name || !email || !query}
+                  >
                     <FontAwesomeIcon icon={faTelegramPlane} />
                   </Button>
                 </Box>

@@ -1,24 +1,74 @@
-.box-checkout{
-
-    display: block;
-    gap: 8px;
-    padding: 16px;
-    border: 1px solid #ddd;
-    /* display: "flex",
-    
-      flexDirection: "column",
-        //   gap: "8px",
-        //   padding: "16px",
-        //   border: "1px solid #ddd", */
+.box-checkout {
+  display: block;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid #ddd;
 }
-.contact-box{
-    width: 50%;
-    margin: auto;
-    padding: 2rem;
+.contact-box {
+  width: 50%;
+  margin: auto;
+  padding: 2rem;
 }
-.label-text{
-    width: 10rem;
+.label-text {
+  width: 10rem;
 }
-.textfield-style{
-    width: 20rem;
+.textfield-style {
+  width: 20rem;
+}
+.custom-control-label {
+  font-weight: bold;
+  margin-left: 1rem;
+}
+.radio-button-box {
+  display: flex !important;
+  justify-content: space-around;
+}
+.button-checkout {
+  display: flex;
+  justify-content: center;
+}
+.credit-card-cvv {
+  display: flex;
+  justify-content: center;
+}
+.dailog-outer-box {
+  width: 10rem;
+}
+.css-ypiqx9-MuiDialogContent-root {
+  width: 25rem;
+  margin: 1rem;
+}
+.ok-button-box {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem;
+}
+.order-summary-box {
+  padding: 2rem;
+}
+.typo-class {
+  padding: 5px;
+}
+.button-box {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.button-shop {
+  background-color: #3b5d50 !important;
+}
+.product-box {
+  display: flex;
+  margin: 1rem;
+}
+.product-name-price {
+  display: block;
+  margin-left: 1rem;
+}
+.typography-class{
+  font-weight: bold !important;
+}
+.text-no-order{
+  font-size: medium !important;
+  margin: 2rem !important;
 }
