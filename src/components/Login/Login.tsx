@@ -43,7 +43,6 @@ const Login = () => {
       alert("Admin login successful");
       localStorage.setItem("userRole", "ADMIN");
       history.push("/home");
-      window.location.reload();
       setUserDetails({ email: "", password: "", Id: "" });
     } else {
       fetch(RegisteredUserDetail)
@@ -62,7 +61,6 @@ const Login = () => {
             localStorage.setItem("userId", user.id); 
             history.push("/products");
             setUserDetails({ email: "", password: "", Id: "" });
-            window.location.reload();
           } else {
             setLoginStatus("error");
           }
