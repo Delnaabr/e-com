@@ -31,13 +31,13 @@ const Header = () => {
       });
   }, []);
   //orderData
-  
+
   const getCartCount = () => {
     if (userId) {
       const userCartData = orderData.filter((item) => item.userId === userId);
       return userCartData.length;
     }
-    return 0;
+    return null;
   };
 
   const handleLogout = () => {
@@ -111,11 +111,6 @@ const Header = () => {
               {(isAdmin && (
                 <>
                   <li>
-                    <Link to="/login" className="nav-link">
-                      Login
-                    </Link>
-                  </li>
-                  <li>
                     <Link
                       className="nav-link"
                       to="/home"
@@ -172,7 +167,7 @@ const Header = () => {
                   onClick={handleUserIconClick}
                 >
                   <img src="assets/images/cart.svg" alt="" />
-                  <span>
+                  <span className="cart-icon">
                     <span>{getCartCount()}</span>
                   </span>
                 </Link>

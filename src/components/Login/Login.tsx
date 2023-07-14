@@ -90,28 +90,28 @@ const Login = () => {
             type="text"
             variant="filled"
             required
-            label="Email"
+            placeholder="Enter your email"
             name="email"
             value={userDetails.email}
             onChange={handleInputChange}
           />
-          <TextField
-            className="grid-textfield"
-            type={showPassword ? "text" : "password"}
-            variant="filled"
-            required
-            label="Password"
-            name="password"
-            value={userDetails.password}
-            onChange={handleInputChange}
-            InputProps={{
-              endAdornment: (
-                <IconButton onClick={handlePasswordVisibilityToggle}>
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              ),
-            }}
-          />
+            <TextField
+              className="grid-textfield"
+              type={showPassword ? "text" : "password"}
+              variant="filled"
+              required
+              placeholder="Password"
+              name="password"
+              value={userDetails.password}
+              onChange={handleInputChange}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handlePasswordVisibilityToggle}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                ),
+              }}
+            />
 
           <Button
             type="submit"

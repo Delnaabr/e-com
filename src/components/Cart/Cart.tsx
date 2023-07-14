@@ -14,7 +14,6 @@ const Cart = (props: any) => {
     fetch(cartItem)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Cart data:", data);
         setCartData(data);
       })
       .catch((error) => {
@@ -24,14 +23,17 @@ const Cart = (props: any) => {
 
   useEffect(() => {
     let totalPrice = 0;
-    cartData.forEach((item) => {
-      const quantity = getProductQuantity(item.product_name);
-      const price = parseFloat(item.product_price);
-      totalPrice += quantity > 1 ? price * quantity : price;
-    });
+    if (userId) {
+      const userCartData = cartData.filter((item) => item.userId === userId);
+      userCartData.forEach((item) => {
+        const quantity = getProductQuantity(item.product_name);
+        const price = parseFloat(item.product_price);
+        totalPrice += quantity > 1 ? price * quantity : price;
+      });
+    }
     setTotalPrice(totalPrice);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartData]);
+  }, [cartData, userId]);
 
   const getProductQuantity = (product: string) => {
     const items = cartData.filter(
@@ -61,7 +63,7 @@ const Cart = (props: any) => {
       state: { products },
     });
   };
-  
+
   const handleShopping = () => {
     history.push("/products");
   };

@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "../components/Checkout/checkout.css";
 import { Box, Button, Typography } from "@mui/material";
 import { orderSummary } from "../utils/utils";
-import { useContext } from "react";
 import { userContext } from "../components/context/useContext";
 
 const OrderSummary = () => {
@@ -40,20 +39,18 @@ const OrderSummary = () => {
       </Typography>
     );
   }
-
   const {
     product_img,
     product_name,
     product_price,
     firstName,
-    lastName,
     email,
     address,
     country,
     state,
     zip,
     credit,
-  } = orderData[0];
+  } = orderData;
 
   return (
     <>
@@ -82,9 +79,7 @@ const OrderSummary = () => {
         <Typography className="typo-class">
           <b>Shipping Status: {shippingStatus}</b>
         </Typography>
-        <Typography className="typo-class">
-          {firstName}, {lastName}
-        </Typography>
+        <Typography className="typo-class">{firstName}</Typography>
         <Typography className="typo-class"> {email}</Typography>
         <Typography className="typo-class"> {address}</Typography>
         <Typography className="typo-class">

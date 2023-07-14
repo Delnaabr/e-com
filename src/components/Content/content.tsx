@@ -7,13 +7,13 @@ export default function Content() {
             <div className="col-lg-5">
               <div className="intro-excerpt">
                 <h1>
-                  Modern Interior <span className="d-block">Design Studio</span>
+                  Modern Furniture <span className="d-block">Design Shop</span>
                 </h1>
-                <p className="mb-4">
+                {/* <p className="mb-4">
                   Donec vitae odio quis nisl dapibus malesuada. Nullam ac
                   aliquet velit. Aliquam vulputate velit imperdiet dolor tempor
                   tristique.
-                </p>
+                </p> */}
                 <p>
                   <div className="btn btn-secondary me-2" >
                     Shop Now

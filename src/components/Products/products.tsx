@@ -34,7 +34,7 @@ export default function Products() {
   }, []);
 
   const filterProduct = (cata: string) => {
-    const updatedList = data.filter((x) => x.category === cata);
+    const updatedList = data.filter((filter) => filter.category === cata);
     setFilter(updatedList);
   };
 
@@ -54,7 +54,6 @@ export default function Products() {
         body: JSON.stringify(newProduct),
       })
         .then((response) => response.json())
-        .then((data) => {})
         .catch((error) => {
           alert("Error adding product");
         });

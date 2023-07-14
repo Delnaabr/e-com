@@ -1,9 +1,10 @@
-import {useState } from "react";
+import {useState ,useContext} from "react";
 import "./checkout.css";
 import { Box, Typography } from "@mui/material";
 import ConfirmationDialog from "../DialogConfirmation";
 import { useHistory, useLocation } from "react-router-dom";
 import { orderSummary } from "../../utils/utils";
+import { userContext } from "../context/useContext";
 
 interface Product {
   id: string;
@@ -33,6 +34,7 @@ const Checkout = () => {
   const location = useLocation();
   const newProduct: Product = location.state as Product;
   const { product_img, product_name, product_price } = newProduct;
+  const userId = useContext(userContext);
 
   const handleCheckout = (event: any) => {
     event.preventDefault();
@@ -55,6 +57,7 @@ const Checkout = () => {
       country,
       state,
       zip,
+      userId: userId,
     };
   
     setIsOderSummary(true);
@@ -77,7 +80,7 @@ const Checkout = () => {
   
     history.push({
       pathname: "/orderSummary",
-      state: { formData, newProduct },
+      state: { formData, newProduct, userId },
     });
   };
 
