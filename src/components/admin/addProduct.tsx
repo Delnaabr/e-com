@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Dialog, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { getProducts } from "../../utils/utils";
+// import { FetchProductList } from "../../redux/Action";
+// import { connect } from "react-redux";
 
 const AddProductForm = (props: any) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -127,4 +129,15 @@ const AddProductForm = (props: any) => {
   );
 };
 
+// const mapStateToProps =(state:any)=>{
+//   return{
+//     product:state.product
+//   }
+// }
+
+// const mapDispatchToProps =(dispatch:any)=>{
+//   return{
+//     // loadProduct:dispatch(FetchProductList())
+//   }
+// }
 export default AddProductForm;

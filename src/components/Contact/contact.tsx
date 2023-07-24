@@ -92,6 +92,7 @@ export default function Contact() {
                     className="btn btn-primary"
                     onClick={handleSubmit}
                     disabled={!name || !email || !query}
+                    aria-label="Deliver Your Queries..."
                   >
                     <FontAwesomeIcon icon={faTelegramPlane} />
                   </Button>

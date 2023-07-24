@@ -51,7 +51,6 @@
 }
 .button-box {
   display: flex;
-  justify-content: flex-end;
   padding: 1rem;
 }
 .button-shop {
@@ -71,4 +70,7 @@
 .text-no-order{
   font-size: medium !important;
   margin: 2rem !important;
+}
+.select-shop{
+  padding-right: 2rem;
 }

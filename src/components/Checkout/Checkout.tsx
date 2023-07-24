@@ -1,4 +1,4 @@
-import {useState ,useContext} from "react";
+import { useState, useContext } from "react";
 import "./checkout.css";
 import { Box, Typography } from "@mui/material";
 import ConfirmationDialog from "../DialogConfirmation";
@@ -15,6 +15,7 @@ interface Product {
 
 const Checkout = () => {
   const [credit, setCredit] = useState(false);
+  const [onlineDelivery, setOnlineDelivery] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [, setIsOderSummary] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -34,7 +35,13 @@ const Checkout = () => {
   const location = useLocation();
   const newProduct: Product = location.state as Product;
   const { product_img, product_name, product_price } = newProduct;
+  const [selectedShop, setSelectedShop] = useState("");
   const userId = useContext(userContext);
+
+  const handleShopSelection = (event: any) => {
+    setSelectedShop(event.target.value);
+    console.log("hg",selectedShop)
+  };
 
   const handleCheckout = (event: any) => {
     event.preventDefault();
@@ -59,10 +66,10 @@ const Checkout = () => {
       zip,
       userId: userId,
     };
-  
+
     setIsOderSummary(true);
     setIsOpen(false);
-  
+
     fetch(orderSummary, {
       method: "POST",
       headers: {
@@ -77,7 +84,7 @@ const Checkout = () => {
       .catch((error) => {
         console.error("Error sending order summary:", error);
       });
-  
+
     history.push({
       pathname: "/orderSummary",
       state: { formData, newProduct, userId },
@@ -91,7 +98,7 @@ const Checkout = () => {
       </Box>
       <Box>
         <h2>Product Details</h2>
-        <Box className='product-box'>
+        <Box className="product-box">
           <Box>
             <img
               src={product_img}
@@ -100,9 +107,15 @@ const Checkout = () => {
               alt={product_name}
             />
           </Box>
-          <Box className='product-name-price'>
-          <Typography className="typography-class"> {product_name}</Typography>
-          <Typography className="typography-class"> Rs {product_price}</Typography>
+          <Box className="product-name-price">
+            <Typography className="typography-class">
+              {" "}
+              {product_name}
+            </Typography>
+            <Typography className="typography-class">
+              {" "}
+              Rs {product_price}
+            </Typography>
           </Box>
         </Box>
       </Box>
@@ -205,6 +218,46 @@ const Checkout = () => {
                   />
                 </Box>
               </Box>
+              <Box className="radio-button-box d-block my-3">
+                <Box className="custom-control custom-radio">
+                  <input
+                    name="onlineDelivery"
+                    type="radio"
+                    onClick={() => setOnlineDelivery(true)}
+                    className="custom-control-input"
+                    required
+                  />
+                  <label className="custom-control-label">
+                    Online Delivery
+                  </label>
+                </Box>
+                <Box className="custom-control custom-radio">
+                  <input
+                    name="onlineDelivery"
+                    type="radio"
+                    className="custom-control-input"
+                    onClick={() => setOnlineDelivery(false)}
+                    required
+                  />
+                  <label className="custom-control-label">Collect From</label>
+                </Box>
+                {!onlineDelivery && (
+                  <Box>
+                    <label className="select-shop">Select a Shop:</label>
+                    <select
+                      id="shop"
+                      value={selectedShop}
+                      onChange={handleShopSelection}
+                      required
+                    >
+                      <option value="">-- Select a Shop --</option>
+                      <option value="shop1">Shop 1</option>
+                      <option value="shop2">Shop 2</option>
+                      <option value="shop3">Shop 3</option>
+                    </select>
+                  </Box>
+                )}
+              </Box>
               <h4 className="mb-3">Payment</h4>
               <Box className="radio-button-box d-block my-3">
                 <Box className="custom-control custom-radio">
@@ -294,7 +347,6 @@ const Checkout = () => {
                     !firstName ||
                     !lastName ||
                     !email ||
-                    !address ||
                     !country ||
                     !state ||
                     !zip

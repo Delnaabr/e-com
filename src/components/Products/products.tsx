@@ -1,8 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { cartItem, getProducts } from "../../utils/utils";
 import { Box, Button } from "@mui/material";
-import { userContext } from "../context/useContext";
+import { cartItem } from "../../utils/utils";
+import { FetchProductList } from "../../redux/Action";
+import { connect } from "react-redux";
 
 interface Product {
   id: string;
@@ -12,54 +13,51 @@ interface Product {
   category: string;
 }
 
-export default function Products() {
-  const [data, setData] = useState<Product[]>([]);
-  const [filter, setFilter] = useState<Product[]>([]);
+interface ProductsProps {
+  products: Product[];
+  fetchProductList: () => void;
+}
+
+const Products = ({ products, fetchProductList }: ProductsProps) => {
   const history = useHistory();
-  const userId = useContext(userContext);
+  const [filter, setFilter] = useState<Product[]>(products);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(getProducts);
-        const products = await response.json();
-        setData(products);
-        setFilter(products);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    fetchProductList();
+  }, [fetchProductList]);
 
-    fetchProducts();
-  }, []);
+  useEffect(() => {
+    setFilter(products); 
+  }, [products]);
 
-  const filterProduct = (cata: string) => {
-    const updatedList = data.filter((filter) => filter.category === cata);
-    setFilter(updatedList);
+  const filterProduct = (category: string) => {
+    if (category === "All") {
+      setFilter(products); 
+    } else {
+      const updatedList = products.filter((product) => product.category === category);
+      setFilter(updatedList);
+    }
   };
 
   const handleCart = (product: any) => {
-    if (userId) {
-      const newProduct = {
-        product_img: product.product_img,
-        product_name: product.product_name,
-        product_price: product.product_price,
-        userId: userId,
-      };
-      fetch(cartItem, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
-      })
-        .then((response) => response.json())
-        .catch((error) => {
-          alert("Error adding product");
-        });
-    } else {
-      history.push("/login");
-    }
+    const newProduct = {
+      product_img: product.product_img,
+      product_name: product.product_name,
+      product_price: product.product_price,
+      userId: "userId", 
+    };
+
+    fetch(cartItem, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        alert("Error adding product");
+      });
   };
 
   const handleBuyNow = (product: any) => {
@@ -85,14 +83,11 @@ export default function Products() {
       .catch((error) => {
         alert("Error adding product");
       });
-    if (userId) {
-      history.push({
-        pathname: "/checkout",
-        state: newProduct,
-      });
-    } else {
-      history.push("/login");
-    }
+
+    history.push({
+      pathname: "/checkout",
+      state: newProduct,
+    });
   };
 
   const ShowProducts = () => {
@@ -101,7 +96,7 @@ export default function Products() {
         <Box className="buttons d-flex justify-content-center mb-5 pb-5">
           <button
             className="btn btn-outline-dark me-2"
-            onClick={() => setFilter(data)}
+            onClick={() => filterProduct("All")}
           >
             All
           </button>
@@ -188,5 +183,18 @@ export default function Products() {
       </Box>
     </Box>
   );
-}
-export const CartItem = () => CartItem;
+};
+
+const mapStateToProps = (state: any) => {
+  return {
+    products: state.products.productList,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchProductList: () => dispatch(FetchProductList()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
