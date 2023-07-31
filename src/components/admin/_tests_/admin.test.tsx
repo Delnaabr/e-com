@@ -58,7 +58,6 @@ test("handles form submission and API call correctly", async () => {
 
   fireEvent.click(addProductButton);
 
-  // Wait for the API call to complete and the alert to show up
   await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(1));
   expect(mockFetch).toHaveBeenCalledWith("/api/products", {
     method: "POST",
@@ -82,7 +81,6 @@ test("handles form submission and API call correctly", async () => {
 test("displays order data correctly", async () => {
   render(<OrderSummaryView />);
 
-  // Ensure that the "No Orders to Display" message is not present
   const noOrdersMessage = screen.getByText("No Orders to Display");
   expect(noOrdersMessage).toBeInTheDocument();
 });

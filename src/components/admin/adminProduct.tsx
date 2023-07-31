@@ -13,6 +13,8 @@ import "./customers.css";
 import { getProducts } from "../../utils/utils";
 import AddProductForm from "./addProduct";
 import ConfirmationDialog from "../DialogConfirmation";
+import { connect } from "react-redux";
+import { FetchProductList ,deleteProduct} from "../../redux/Action";
 
 interface adminProduct {
   id: string;
@@ -22,21 +24,19 @@ interface adminProduct {
   product_stock: string;
   category: string;
 }
+interface AdminProductsProps {
+  products: adminProduct[];
+  fetchProductList: () => void;
+}
 
-const AdminProducts = () => {
-  const [productsDetails, setProductsDetails] = useState<adminProduct[]>([]);
+const AdminProducts = ({ products, fetchProductList }: AdminProductsProps) => {
   const [open, setOpen] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState("");
 
   useEffect(() => {
-    fetch(getProducts)
-      .then((response) => response.json())
-      .then((data: adminProduct[]) => setProductsDetails(data))
-      .catch((error) => {
-        console.error("Error fetching data", error);
-      });
-  }, []);
+    fetchProductList(); 
+  }, [fetchProductList]);
 
   const handleClose = () => {
     setOpen(false);
@@ -53,22 +53,15 @@ const AdminProducts = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        const index = productsDetails.findIndex(
-          (product) => product.id === productId
-        );
-        if (index !== -1) {
-          const updatedProducts = [...productsDetails];
-          updatedProducts.splice(index, 1);
-          setProductsDetails(updatedProducts);
-          setOpen(false);
-          alert("Product deleted successfully");
-        }
+        deleteProduct(productId);
+        setOpen(false);
+        alert("Product deleted successfully");
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
       });
   };
-
+  
   return openForm ? (
     <AddProductForm handleClose={handleClose} open={openForm} />
   ) : (
@@ -97,7 +90,7 @@ const AdminProducts = () => {
             </Box>
           </TableCell>
           <TableBody>
-            {productsDetails?.map((products) => (
+            {products?.map((products) => (
               <TableRow key={products.id}>
                 <TableCell component="th" scope="row" align="center">
                   <img
@@ -135,4 +128,16 @@ const AdminProducts = () => {
     </>
   );
 };
-export default AdminProducts;
+
+const mapStateToProps = (state: any) => {
+  return {
+    products: state.products.productList,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchProductList: () => dispatch(FetchProductList()),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AdminProducts);

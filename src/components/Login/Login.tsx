@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   Typography,
@@ -11,8 +11,21 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import { RegisteredUserDetail } from "../../utils/utils";
 import "./login.css";
+import { connect } from "react-redux";
+import { fetchUserList, userLogin } from "../../redux/Action";
 
-const Login = () => {
+
+// interface UserDetails {
+//   id: string;
+//   email: string;
+//   password: string;
+// }
+
+interface UserListProps {
+  fetchUserList: () => void;
+  userLogin: (userDetails: any) => void;
+}
+const Login = ({ fetchUserList, userLogin }: UserListProps) => {
   const [loginStatus, setLoginStatus] = useState("");
   const [userDetails, setUserDetails] = useState({
     email: "",
@@ -27,6 +40,10 @@ const Login = () => {
     setUserDetails({ ...userDetails, [name]: value });
   };
 
+  useEffect(() => {
+    fetchUserList();
+  }, [fetchUserList]);
+
   const handleSignUpClick = () => {
     history.push("/register");
   };
@@ -35,7 +52,7 @@ const Login = () => {
     event.preventDefault();
     const adminEmail = "admin@gmail.com";
     const adminPassword = "admin";
-  
+
     if (
       userDetails.email === adminEmail &&
       userDetails.password === adminPassword
@@ -54,15 +71,16 @@ const Login = () => {
               item.email === userDetails.email &&
               item.password === userDetails.password
           );
-  
+
           if (user) {
             alert("Login successful");
             localStorage.setItem("userRole", "USER");
             localStorage.setItem("userEmail", userDetails.email);
-            localStorage.setItem("userId", user.id); 
+            localStorage.setItem("userId", user.id);
             history.push("/products");
             setUserDetails({ email: "", password: "", Id: "" });
-            window.location.reload();
+            userLogin(user)
+            // window.location.reload();
           } else {
             setLoginStatus("error");
           }
@@ -72,7 +90,7 @@ const Login = () => {
         });
     }
   };
-  
+
   const handlePasswordVisibilityToggle = () => {
     setShowPassword(!showPassword);
   };
@@ -95,23 +113,23 @@ const Login = () => {
             value={userDetails.email}
             onChange={handleInputChange}
           />
-            <TextField
-              className="grid-textfield"
-              type={showPassword ? "text" : "password"}
-              variant="filled"
-              required
-              placeholder="Password"
-              name="password"
-              value={userDetails.password}
-              onChange={handleInputChange}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={handlePasswordVisibilityToggle}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                ),
-              }}
-            />
+          <TextField
+            className="grid-textfield"
+            type={showPassword ? "text" : "password"}
+            variant="filled"
+            required
+            placeholder="Password"
+            name="password"
+            value={userDetails.password}
+            onChange={handleInputChange}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handlePasswordVisibilityToggle}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              ),
+            }}
+          />
 
           <Button
             type="submit"
@@ -142,5 +160,18 @@ const Login = () => {
     </>
   );
 };
+const mapStateToProps = (state: any) => {
+  return {
+   user: state,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchUserList: () => dispatch(fetchUserList()),
+    userLogin: (userDetails:any) => dispatch(userLogin(userDetails)),
+  };
+};
+
 export const Admin = () => localStorage.getItem("userRole") === "ADMIN";
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

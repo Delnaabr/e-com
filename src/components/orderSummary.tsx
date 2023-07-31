@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "../components/Checkout/checkout.css";
 import { Box, Button, Typography } from "@mui/material";
-import { orderSummary } from "../utils/utils";
+import { orderDetails } from "../utils/utils";
 import { userContext } from "../components/context/useContext";
 
 const OrderSummary = () => {
@@ -16,10 +16,9 @@ const OrderSummary = () => {
   };
 
   useEffect(() => {
-    fetch(orderSummary)
+    fetch(orderDetails)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Order summary data:", data);
         if (userId) {
           const userOrderData = data.filter(
             (item: any) => item.userId === userId

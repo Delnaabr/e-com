@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Dialog, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { getProducts } from "../../utils/utils";
-// import { FetchProductList } from "../../redux/Action";
-// import { connect } from "react-redux";
+import { addNewProduct } from "../../redux/Action";
+import { connect } from "react-redux";
 
 const AddProductForm = (props: any) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -13,11 +21,9 @@ const AddProductForm = (props: any) => {
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
-    // Fetch the product categories from the getProducts API endpoint
     fetch(getProducts)
       .then((response) => response.json())
       .then((data) => {
-        // Extract the unique categories from the product data
         const uniqueCategories = Array.from(
           new Set(data.map((product: any) => product.category))
         );
@@ -46,21 +52,8 @@ const AddProductForm = (props: any) => {
       product_stock: parseInt(productQuantity),
     };
 
-    fetch(getProducts, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        alert("Product added Successfully");
-      })
-      .catch((error) => {
-        alert("Error adding product");
-      });
-
+    props.addNewProduct(newProduct);
+    alert("Product Added successfully");
     props.handleClose();
   };
 
@@ -91,7 +84,7 @@ const AddProductForm = (props: any) => {
           <Select
             className="select-menu-item"
             value={productCategory}
-            onChange={(event:any) => setProductCategory(event.target.value)}
+            onChange={(event: any) => setProductCategory(event.target.value)}
           >
             {categories.map((category: string) => (
               <MenuItem key={category} value={category}>
@@ -129,15 +122,15 @@ const AddProductForm = (props: any) => {
   );
 };
 
-// const mapStateToProps =(state:any)=>{
-//   return{
-//     product:state.product
-//   }
-// }
+const mapStateToProps = (state: any) => {
+  return {
+    product: state.product,
+  };
+};
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    addNewProduct: (productData: any) => dispatch(addNewProduct(productData)),
+  };
+};
 
-// const mapDispatchToProps =(dispatch:any)=>{
-//   return{
-//     // loadProduct:dispatch(FetchProductList())
-//   }
-// }
-export default AddProductForm;
+export default connect(mapStateToProps, mapDispatchToProps)(AddProductForm);

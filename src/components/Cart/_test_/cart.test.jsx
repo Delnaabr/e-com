@@ -11,7 +11,6 @@ describe("Cart Component", () => {
   it("displays 'Continue shopping' and 'Buy Now' buttons when there are products in the cart", async () => {
     render(<Cart />);
     
-    // Check if 'Continue shopping' and 'Buy Now' buttons are displayed
     const continueShoppingButton = screen.getByRole('button', { name: /Continue shopping/i });
   
     expect(continueShoppingButton).toBeInTheDocument();

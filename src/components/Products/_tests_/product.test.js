@@ -3,7 +3,8 @@ import Products from "../products";
 import { render, screen } from "@testing-library/react";
 
 
-test("products page renders correctly", () => {
+describe("products page renders correctly", () => {
+  it("products page renders correctly", ()=> {
     const mockProducts = [
       {
         id: "1",
@@ -30,4 +31,5 @@ test("products page renders correctly", () => {
     expect(screen.getByText("Product 2")).toBeInTheDocument();
     expect(screen.getByText("Buy Now")).toBeInTheDocument();
     expect(screen.getByText("Add to Cart")).toBeInTheDocument();
+  })
   });

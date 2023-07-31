@@ -10,10 +10,13 @@ import {
 import { Link } from "react-router-dom";
 import "./register.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { connect } from "react-redux";
+import { addNewUser, fetchUserList } from "../../redux/Action";
 import { RegisteredUserDetail } from "../../utils/utils";
 
-const Register = () => {
+const Register = (props: any) => {
   const [open, setOpen] = useState(false);
+  console.log(open);
   const [showPassword, setShowPassword] = useState(false);
   const [userDetails, setUserDetails] = useState({
     firstname: "",
@@ -30,6 +33,7 @@ const Register = () => {
 
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
+    // fetchUserList(userDetails);
 
     fetch(RegisteredUserDetail, {
       method: "POST",
@@ -41,6 +45,7 @@ const Register = () => {
       .then((response) => response.json())
       .then((data) => {
         alert("Registered Successfully");
+        props.addNewUser(userDetails);
       })
       .catch((error) => {
         alert("Error adding product");
@@ -157,4 +162,16 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = (state: any) => {
+  return {
+    userList: state.userList.getAllUser,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    getAllUserList: () => dispatch(fetchUserList()),
+    addNewUser: (addUSer: any) => dispatch(addNewUser(addUSer)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

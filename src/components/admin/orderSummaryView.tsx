@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { orderSummary } from "../../utils/utils";
+import { orderDetails } from "../../utils/utils";
 import "./customers.css";
 
 interface OrderView {
@@ -24,7 +24,7 @@ const OrderSummaryView = () => {
   const [orderData, setOrderData] = useState<OrderView[]>([]);
 
   useEffect(() => {
-    fetch(orderSummary)
+    fetch(orderDetails)
       .then((response) => response.json())
       .then((data) => {
         setOrderData(data);

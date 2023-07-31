@@ -19,34 +19,37 @@ import { userContext } from "./components/context/useContext";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [userId,setUserId] = useState<any>("");
+  const [userId, setUserId] = useState<any>("");
 
-  useEffect (()=>{
-    return setUserId(localStorage.getItem('userId'));
-  },[])
+  useEffect(() => {
+    return setUserId(localStorage.getItem("userId"));
+  }, []);
 
   return (
     <div>
       <Router>
         <userContext.Provider value={userId}>
-        <Header />
-        <Switch>
-          <Route exact path="/adminProducts" render={() => <AdminProducts />} />
-          <Route path="/customers" render={() => <Customers />} />
-          <Route exact path="/home" render={() => <Content />} />
-          <Redirect exact from="/" to="/home" />
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/register" render={() => <Register />} />
-          <Route path="/products" component={products} />
-          <Route path="/cart" component={Cart} />
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/contactUs" render={() => <Contact />} />
-          <Route path="/admin-feedback" render={() => <FeedBackView/>} />
-          <Route path="/orderView" render={() => <OrderSummaryView/>} />
-          <Route path="/orderSummary" render={() => <OrderSummary/>} />
-
-        </Switch>
-        <Footer />
+          <Header />
+          <Switch>
+            <Route
+              exact
+              path="/adminProducts"
+              render={() => <AdminProducts />}
+            />
+            <Route path="/customers" render={() => <Customers />} />
+            <Route exact path="/home" render={() => <Content />} />
+            <Redirect exact from="/" to="/home" />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/products" component={products} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/contactUs" render={() => <Contact />} />
+            <Route path="/admin-feedback" render={() => <FeedBackView />} />
+            <Route path="/orderView" render={() => <OrderSummaryView />} />
+            <Route path="/orderSummary" render={() => <OrderSummary />} />
+          </Switch>
+          <Footer />
         </userContext.Provider>
       </Router>
     </div>

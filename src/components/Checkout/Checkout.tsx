@@ -3,8 +3,10 @@ import "./checkout.css";
 import { Box, Typography } from "@mui/material";
 import ConfirmationDialog from "../DialogConfirmation";
 import { useHistory, useLocation } from "react-router-dom";
-import { orderSummary } from "../../utils/utils";
+import { orderDetails } from "../../utils/utils";
 import { userContext } from "../context/useContext";
+import { connect } from "react-redux";
+import { orderSummary } from "../../redux/Action";
 
 interface Product {
   id: string;
@@ -13,7 +15,7 @@ interface Product {
   product_price: number;
 }
 
-const Checkout = () => {
+const Checkout = (props: any) => {
   const [credit, setCredit] = useState(false);
   const [onlineDelivery, setOnlineDelivery] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +42,6 @@ const Checkout = () => {
 
   const handleShopSelection = (event: any) => {
     setSelectedShop(event.target.value);
-    console.log("hg",selectedShop)
   };
 
   const handleCheckout = (event: any) => {
@@ -70,7 +71,7 @@ const Checkout = () => {
     setIsOderSummary(true);
     setIsOpen(false);
 
-    fetch(orderSummary, {
+    fetch(orderDetails, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,6 +81,7 @@ const Checkout = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Order summary data:", data);
+        props.orderSummary(data)
       })
       .catch((error) => {
         console.error("Error sending order summary:", error);
@@ -372,4 +374,16 @@ const Checkout = () => {
     </Box>
   );
 };
-export default Checkout;
+const mapStateToProps = (state: any) => {
+  return {
+    products: state,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    orderSummary: (item: any) => dispatch(orderSummary(item)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

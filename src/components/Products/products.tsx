@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import { cartItem } from "../../utils/utils";
-import { FetchProductList } from "../../redux/Action";
+import { FetchProductList, addToCart, buyNow } from "../../redux/Action.js";
 import { connect } from "react-redux";
 
 interface Product {
@@ -16,9 +16,16 @@ interface Product {
 interface ProductsProps {
   products: Product[];
   fetchProductList: () => void;
+  addToCart: any;
+  buyNow: any;
 }
 
-const Products = ({ products, fetchProductList }: ProductsProps) => {
+const Products = ({
+  products,
+  fetchProductList,
+  addToCart,
+  buyNow,
+}: ProductsProps) => {
   const history = useHistory();
   const [filter, setFilter] = useState<Product[]>(products);
 
@@ -27,14 +34,16 @@ const Products = ({ products, fetchProductList }: ProductsProps) => {
   }, [fetchProductList]);
 
   useEffect(() => {
-    setFilter(products); 
+    setFilter(products);
   }, [products]);
 
   const filterProduct = (category: string) => {
     if (category === "All") {
-      setFilter(products); 
+      setFilter(products);
     } else {
-      const updatedList = products.filter((product) => product.category === category);
+      const updatedList = products.filter(
+        (product) => product.category === category
+      );
       setFilter(updatedList);
     }
   };
@@ -44,29 +53,7 @@ const Products = ({ products, fetchProductList }: ProductsProps) => {
       product_img: product.product_img,
       product_name: product.product_name,
       product_price: product.product_price,
-      userId: "userId", 
-    };
-
-    fetch(cartItem, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        alert("Error adding product");
-      });
-  };
-
-  const handleBuyNow = (product: any) => {
-    const newProduct = {
-      product_img: product.product_img,
-      product_name: product.product_name,
-      product_price: product.product_price,
-      category: product.category,
-      product_stock: parseInt(product.product_stock),
+      userId: "userId",
     };
 
     fetch(cartItem, {
@@ -78,7 +65,32 @@ const Products = ({ products, fetchProductList }: ProductsProps) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // alert("Product added Successfully");
+        addToCart(newProduct);
+        // window.location.reload();
+      })
+      .catch((error) => {
+        alert("Error adding product");
+      });
+  };
+
+  const handleBuyNow = (product: any) => {
+    const newProduct = {
+      product_img: product.product_img,
+      product_name: product.product_name,
+      product_price: product.product_price,
+      category: product.category,
+    };
+
+    fetch(cartItem, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        buyNow(data);
       })
       .catch((error) => {
         alert("Error adding product");
@@ -194,6 +206,8 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchProductList: () => dispatch(FetchProductList()),
+    addToCart: (item: any) => dispatch(addToCart(item)),
+    buyNow: (item: any) => dispatch(buyNow(item)),
   };
 };
 
